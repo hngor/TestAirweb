@@ -3,6 +3,9 @@
     <style name="Base.Theme.TestAirweb" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#004B93</item>
+        <item name="colorPrimaryDark">#004B93</item>
+        <item name="colorAccent">#FF7C9DB7</item>
     </style>
 
     <style name="Theme.TestAirweb" parent="Base.Theme.TestAirweb" />

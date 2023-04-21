@@ -1,60 +1,184 @@
 package fr.airweb.news.ui.home
 
+import android.app.AlertDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import fr.airweb.news.R
+import fr.airweb.news.databinding.FragmentHomeBinding
+import fr.airweb.news.ui.home.adapter.HomePageAdapter
+import fr.airweb.news.ui.home.model.HomeUiModel
+import fr.airweb.news.util.NewsTypeEnum
+import fr.airweb.news.util.SortNewsEnum
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class HomePageFragment : Fragment() {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var homePageAdapter: HomePageAdapter
+    private val viewModel: HomePageViewModel by viewModel()
+
+    private lateinit var binding: FragmentHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+        viewModel.data.observe(this) { state -> updateUI(state) }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initClickListeners()
+        initToolbar()
+        initRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getNews()
+    }
+
+    private fun initClickListeners() {
+        binding.btnSearch.setOnClickListener {
+            viewModel.searchNews(binding.editSearch.text.toString())
+        }
+
+        binding.btnClearSearch.setOnClickListener {
+            binding.editSearch.setText("")
+            viewModel.getNewsFromType()
+        }
+    }
+
+    private fun updateUI(state: HomeUiModel) {
+        when (state) {
+            HomeUiModel.Loading -> {
+                binding.recyclerViewNews.visibility = View.GONE
+                binding.txtNoNews.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
+            }
+
+            is HomeUiModel.NewsList -> {
+                binding.recyclerViewNews.visibility = View.VISIBLE
+                binding.txtNoNews.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
+
+                homePageAdapter.articleList = state.newsList
+                homePageAdapter.notifyDataSetChanged()
+            }
+
+            HomeUiModel.NewsListEmpty -> {
+                binding.recyclerViewNews.visibility = View.GONE
+                binding.txtNoNews.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
+            }
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun initToolbar() {
+        binding.toolbarHomePage.inflateMenu(R.menu.menu_home)
+        binding.toolbarHomePage.setOnMenuItemClickListener { listener ->
+            when (listener.itemId) {
+                R.id.action_filter -> {
+                    showFilterDialog()
+                }
+
+                R.id.action_sort -> {
+                    showSortDialog()
+                }
+
+                R.id.action_contact -> {
+                    navigateToContactPageFragment()
                 }
             }
+            true
+        }
+    }
+
+    private fun showSortDialog() {
+        val filters = arrayOf(
+            SortNewsEnum.DATE.value,
+            SortNewsEnum.TITLE.value
+        )
+
+        var selectedFilter = filters.indexOf(viewModel.sortArticles)
+
+        AlertDialog.Builder(activity)
+            .setTitle(getString(R.string.home_page_sort_dialog_title))
+            .setSingleChoiceItems(filters, selectedFilter) { dialog, which ->
+                selectedFilter = which
+                viewModel.sortArticles = filters[selectedFilter]
+            }
+            .setPositiveButton(getString(R.string.home_fragment_sort_dialog_ok_button_text)) { dialog, which ->
+                dialog.dismiss()
+                viewModel.getSortedNews()
+            }
+            .setNegativeButton(getString(R.string.home_fragment_sort_dialog_cancel_button_text)) { dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun showFilterDialog() {
+        val filters = arrayOf(
+            NewsTypeEnum.NEWS.value,
+            NewsTypeEnum.ACTUALITE.value,
+            NewsTypeEnum.HOT.value
+        )
+
+        var selectedFilter = filters.indexOf(viewModel.displayNewsType)
+
+        AlertDialog.Builder(activity)
+            .setTitle(getString(R.string.home_page_filter_dialog_title))
+            .setSingleChoiceItems(filters, selectedFilter) { dialog, which ->
+                selectedFilter = which
+                viewModel.displayNewsType = filters[selectedFilter]
+            }
+            .setPositiveButton(getString(R.string.home_fragment_filter_dialog_ok_button_text)) { dialog, which ->
+                dialog.dismiss()
+                viewModel.getNewsFromType()
+            }
+            .setNegativeButton(getString(R.string.home_fragment_filter_dialog_cancel_button_text)) { dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun initRecyclerView() {
+        val viewManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+
+        homePageAdapter = HomePageAdapter(
+            onNewsClick = { articleId -> navigateToDetailPageFragment(articleId = articleId) }
+        )
+
+        binding.recyclerViewNews.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = homePageAdapter
+        }
+    }
+
+    private fun navigateToDetailPageFragment(articleId: Int) {
+        val action = HomePageFragmentDirections.navigateToDetailPageFragment(articleId = articleId)
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToContactPageFragment() {
+        val action = HomePageFragmentDirections.navigateToContactPageFragment()
+        findNavController().navigate(action)
     }
 }

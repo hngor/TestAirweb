@@ -1,8 +1,8 @@
 package fr.airweb.news.domain.state
 
-import fr.airweb.news.data.model.NewsEntity
+import fr.airweb.news.data.model.ArticleEntity
 
-sealed class GetAllNewsState {
-    data class NewsList(val newsList: List<NewsEntity>) : GetAllNewsState()
-    object NewsListEmpty : GetAllNewsState()
+sealed class GetAllArticlesState {
+    data class ArticlesList(val newsList: List<ArticleEntity>) : GetAllArticlesState()
+    object ArticlesListEmpty : GetAllArticlesState()
 }

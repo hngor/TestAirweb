@@ -3,7 +3,7 @@ package fr.airweb.news.ui.detail.mapper
 import fr.airweb.news.domain.state.GetArticleState
 import fr.airweb.news.ui.detail.model.DetailUiModel
 
-class DetailUiMapper {
+class DetailPageUiMapper {
 
     fun toUiMapper(state: GetArticleState): DetailUiModel {
         return when (state) {

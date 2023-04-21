@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import fr.airweb.news.util.Constants
 
 @Entity(tableName = Constants.NEWS_TABLE_NAME)
-data class NewsEntity(
+data class ArticleEntity(
     @PrimaryKey val id: Int,
     val type: String,
     val date: Long,

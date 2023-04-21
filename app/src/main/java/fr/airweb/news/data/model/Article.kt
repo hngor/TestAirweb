@@ -2,7 +2,7 @@ package fr.airweb.news.data.model
 
 import com.squareup.moshi.Json
 
-data class NewsItem(
+data class Article(
     @Json(name = "nid") val id: Int,
     val type: String,
     val date: String,

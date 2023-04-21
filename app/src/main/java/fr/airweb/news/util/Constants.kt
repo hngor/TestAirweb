@@ -2,7 +2,6 @@ package fr.airweb.news.util
 
 class Constants {
     companion object {
-
         const val DATE_FORMAT = "yyyy-MM-dd"
 
         const val DATABASE_NAME = "testAirwebDB"

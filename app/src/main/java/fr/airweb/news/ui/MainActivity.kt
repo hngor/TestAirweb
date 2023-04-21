@@ -1,7 +1,8 @@
-package fr.airweb.news
+package fr.airweb.news.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import fr.airweb.news.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

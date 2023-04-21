@@ -1,10 +1,10 @@
-package com.example.testmodulotech.util
+package fr.airweb.news.util
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-open class BaseViewModel<T> : ViewModel() {
+open class BaseViewModel<T : Any> : ViewModel() {
 
     private val _data: MutableLiveData<T> = MutableLiveData()
     val data: LiveData<T>

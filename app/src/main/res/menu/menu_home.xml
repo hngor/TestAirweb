@@ -4,11 +4,16 @@
     <item
         android:id="@+id/action_filter"
         android:icon="@drawable/baseline_filter_alt_24"
-        android:title="Filtrer"
-        app:showAsAction="always" />
+        android:title="@string/menu_item_action_filter"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_sort"
         android:icon="@drawable/baseline_sort_24"
-        android:title="Trier"
-        app:showAsAction="always" />
+        android:title="@string/menu_item_action_sort"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_contact"
+        android:icon="@drawable/baseline_info_24"
+        android:title="@string/menu_item_action_contact"
+        app:showAsAction="ifRoom" />
 </menu>

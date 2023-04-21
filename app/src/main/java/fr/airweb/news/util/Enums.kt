@@ -5,3 +5,8 @@ enum class NewsTypeEnum(val value: String) {
     ACTUALITE("actualité"),
     HOT("hot")
 }
+
+enum class SortNewsEnum(val value: String) {
+    DATE("date"),
+    TITLE("title")
+}

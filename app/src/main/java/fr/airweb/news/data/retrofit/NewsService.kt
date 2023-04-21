@@ -1,11 +1,11 @@
 package fr.airweb.news.data.retrofit
 
 import fr.airweb.news.data.model.News
-import retrofit2.Response
+import io.reactivex.Single
 import retrofit2.http.GET
 
 interface NewsService {
 
-    @GET("")
-    fun getNews(): Response<News>
+    @GET("psg.json")
+    fun getNews(): Single<News>
 }

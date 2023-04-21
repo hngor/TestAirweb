@@ -1,20 +1,31 @@
 package fr.airweb.news.data
 
 import fr.airweb.news.data.dao.TestAirwebDB
-import fr.airweb.news.data.model.NewsEntity
-import fr.airweb.news.util.NewsTypeEnum
-import io.reactivex.rxjava3.core.Single
+import fr.airweb.news.data.model.ArticleEntity
 
 class NewsLocalDataSource(private val database: TestAirwebDB) {
-    fun getAllNews(): Single<List<NewsEntity>> {
-        return Single.just(database.newsDao().getAllNews())
+
+    fun addArticle(newsItem: ArticleEntity) {
+        database.newsDao().addArticle(newsItem)
     }
 
-    fun getNewsByType(newsType: NewsTypeEnum): Single<List<NewsEntity>> {
-        return Single.just(database.newsDao().getNewsFromType(newsType = newsType.value))
+    fun getAllArticles(): List<ArticleEntity> {
+        return database.newsDao().getAllArticles()
     }
 
-    fun searchNews(searchValue: String): Single<List<NewsEntity>> {
-        return Single.just(database.newsDao().searchNews(searchValue = searchValue))
+    fun getArticlesFromId(id: Int): ArticleEntity {
+        return database.newsDao().getArticleFromId(id = id)
+    }
+
+    fun getArticlesByType(newsType: String): List<ArticleEntity> {
+        return database.newsDao().getArticlesFromType(articleType = newsType)
+    }
+
+    fun searchArticles(searchValue: String): List<ArticleEntity> {
+        return database.newsDao().searchArticles(searchValue = searchValue)
+    }
+
+    fun clearList() {
+        database.newsDao().clearTable()
     }
 }

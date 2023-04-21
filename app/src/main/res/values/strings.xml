@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">TestAirweb</string>
+
+    <string name="home_fragment_no_news_msg">Pas d\'articles</string>
+    <string name="home_fragment_filter_dialog_ok_button_text">OK</string>
+    <string name="home_fragment_filter_dialog_cancel_button_text">ANNULER</string>
+    <string name="home_fragment_sort_dialog_ok_button_text">OK</string>
+    <string name="home_fragment_sort_dialog_cancel_button_text">ANNULER</string>
+
+    <string name="imageview_content_description_article">Image article</string>
+
+    <string name="menu_item_action_filter">Filtrer</string>
+    <string name="menu_item_action_sort">Trier</string>
+    <string name="menu_item_action_contact">Contact</string>
+
+    <string name="hint_search_edit_text">Recherche</string>
+
+    <string name="detail_page_error_message">Une erreur s\'est produite</string>
+
+    <string name="contact_page_toolbar_title">Contact</string>
+    <string name="contact_page_title">Airweb - Facilitateur de mobilité</string>
+    <string name="contact_page_address">1 Rue Royale, Bureaux de Colline, 92210 Saint Cloud</string>
+    <string name="contact_page_mail">contact@airweb.fr</string>
+    <string name="contact_page_phone_number_formatted">+33 1 76 61 65 10</string>
+    <string name="contact_page_phone_number">+33176616510</string>
+    <string name="home_page_filter_dialog_title">Filtre</string>
+    <string name="home_page_sort_dialog_title">Trier</string>
 </resources>

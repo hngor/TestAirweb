@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import fr.airweb.news.R
 import fr.airweb.news.ui.home.model.NewsUiModel
 
-class HomeAdapter(
+class HomePageAdapter(
     private val onNewsClick: ((Int) -> Unit)?
 ) : RecyclerView.Adapter<NewsArticleViewHolder>() {
 

@@ -1,19 +1,19 @@
 package fr.airweb.news.domain.usecase
 
 import fr.airweb.news.data.NewsRepository
-import fr.airweb.news.domain.state.GetNewsFromTypeState
+import fr.airweb.news.domain.state.GetArticlesFromTypeState
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
-class GetNewsFromTypeUseCase(private val newsRepository: NewsRepository) {
+class GetArticlesFromTypeUseCase(private val newsRepository: NewsRepository) {
 
-    operator fun invoke(type: String): Single<GetNewsFromTypeState> {
+    operator fun invoke(type: String): Single<GetArticlesFromTypeState> {
         return Single.create { emitter ->
-            newsRepository.getNewsFromType(type).subscribeOn(Schedulers.io()).subscribe(
+            newsRepository.getArticlesFromType(type).subscribeOn(Schedulers.io()).subscribe(
                 {
-                        success -> emitter.onSuccess(GetNewsFromTypeState.NewsList(success))
+                        success -> emitter.onSuccess(GetArticlesFromTypeState.ArticlesList(success))
                 },
-                { emitter.onSuccess(GetNewsFromTypeState.NewsListEmpty) }
+                { emitter.onSuccess(GetArticlesFromTypeState.ArticlesListEmpty) }
             )
         }
     }
